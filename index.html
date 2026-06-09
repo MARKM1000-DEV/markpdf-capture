@@ -319,6 +319,21 @@
     // ──────────────────────────────────────────────────────────────────────────
     // Roteamento de modo
     // ──────────────────────────────────────────────────────────────────────────
+    // TURN relay — necessário para 4G/redes com NAT simétrico (CGNAT)
+    const ICE_SERVERS = [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      {
+        urls: [
+          'turn:openrelay.metered.ca:80',
+          'turn:openrelay.metered.ca:443',
+          'turn:openrelay.metered.ca:443?transport=tcp',
+        ],
+        username:   'openrelayproject',
+        credential: 'openrelayproject',
+      },
+    ];
+
     if (isDesktop && /^\d{8}$/.test(sessionCode)) {
       iniciarModoDesktop(sessionCode);
     } else {
@@ -396,7 +411,7 @@
 
       setStatus('Conectando ao celular...', 's-loading', true);
 
-      const peer = new Peer();
+      const peer = new Peer({ config: { iceServers: ICE_SERVERS } });
       peer.on('open', () => {
         const conn = peer.connect('mkpdf-' + code, { reliable: true });
         conn.on('open',  () => setStatus('Conectado ao celular — tire as fotos e envie', 's-ready', false));
@@ -516,7 +531,7 @@
 
       function iniciarSessao() {
         const codigo = gerarCodigo();
-        peer = new Peer('mkpdf-' + codigo);
+        peer = new Peer('mkpdf-' + codigo, { config: { iceServers: ICE_SERVERS } });
         peer.on('open', () => {
           codeDisplay.textContent = codigo;
           codeBox.style.display   = 'block';

@@ -1,0 +1,59 @@
+===========================================================
+  MarkPDF — Página de Captura Mobile
+===========================================================
+
+SOBRE ESTA PASTA
+-----------------
+Contém o arquivo index.html que é hospedado no GitHub Pages
+e funciona como a interface do celular para o módulo
+"Captura Mobile" do MarkPDF Pro.
+
+URL ATUAL (GitHub Pages)
+-------------------------
+https://markm1000-dev.github.io/markpdf-capture/
+
+COMO FUNCIONA
+--------------
+1. No app desktop, o usuário abre o módulo "Captura Mobile"
+2. O app gera um código de sessão de 8 dígitos (ex: 85860136)
+3. O app exibe o link e um QR Code para o celular escanear
+4. O celular abre esta página no navegador
+5. O usuário fotografa o documento pelo celular
+6. As fotos são transmitidas via WebRTC (P2P) direto para o app
+   — sem servidor intermediário, sem nuvem
+7. O app recebe as imagens e pode gerar um PDF
+
+TECNOLOGIA
+-----------
+- PeerJS 1.5.4 (WebRTC) para conexão P2P
+- Celular = HOST PeerJS (ID: mkpdf-CODIGO)
+- Electron = CLIENT PeerJS (conecta ao celular)
+- Broker público do PeerJS só para sinalização inicial
+  (após conectar, os dados vão direto P2P)
+- HTML/CSS/JS puro — sem framework
+
+SEGURANÇA (v3.0.0)
+-------------------
+- SRI (Subresource Integrity) nos scripts CDN
+- Código de sessão validado: aceita apenas 8 dígitos numéricos
+- Limite: 30 imagens por sessão
+- Limite: 8 MB por imagem
+
+COMO ATUALIZAR A PÁGINA
+------------------------
+1. Edite o arquivo index.html nesta pasta
+2. Faça commit e push para o repositório GitHub
+   (repositório: markm1000-dev/markpdf-capture)
+3. O GitHub Pages publica automaticamente em ~1 minuto
+
+ATENÇÃO
+--------
+- O código de sessão muda a cada uso — gerado pelo app desktop
+- A página não armazena nenhuma imagem em servidor
+- Funciona em qualquer navegador mobile moderno (Chrome, Safari)
+- Requer que celular e PC estejam na mesma rede Wi-Fi para melhor
+  desempenho (WebRTC pode funcionar via internet em alguns casos)
+
+===========================================================
+  MarkPDF Pro 3.0.0 — Mark Studio © 2026
+===========================================================
