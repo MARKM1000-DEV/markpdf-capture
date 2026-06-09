@@ -199,7 +199,7 @@
       const peer = new Peer();
 
       peer.on('open', () => {
-        conn = peer.connect(peerId, { reliable: true, serialization: 'raw' });
+        conn = peer.connect(peerId, { reliable: true });
 
         conn.on('open', () => {
           setStatus('✅ Conectado ao computador!', 'status-ready');
