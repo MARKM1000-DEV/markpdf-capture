@@ -267,11 +267,11 @@
         </div>
       </div>
       <div id="desktop-actions">
-        <button class="btn btn-cancel-sm" onclick="desktopCancelar()">
+        <button class="btn btn-cancel-sm" id="btn-cancel-desktop">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           Cancelar
         </button>
-        <button class="btn btn-finish" id="btn-finish" disabled onclick="desktopFinalizar()">
+        <button class="btn btn-finish" id="btn-finish" disabled>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           Finalizar e Enviar ao MarkPDF
         </button>
@@ -286,8 +286,12 @@
 
   </div>
 
-  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"
+          integrity="sha384-nlUQ8ZqCbvStErob+biJNzSgltf6urV3VGqhfIfzhmg9RXmpeRm76ELw0pYnKlTR"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+          integrity="sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG"
+          crossorigin="anonymous"></script>
   <script>
     const params      = new URLSearchParams(location.search);
     const isDesktop   = params.get('desktop') === 'true';
@@ -315,7 +319,7 @@
     // ──────────────────────────────────────────────────────────────────────────
     // Roteamento de modo
     // ──────────────────────────────────────────────────────────────────────────
-    if (isDesktop && sessionCode.length === 8) {
+    if (isDesktop && /^\d{8}$/.test(sessionCode)) {
       iniciarModoDesktop(sessionCode);
     } else {
       iniciarModoMobile();
@@ -342,6 +346,8 @@
       const imgCountEl = document.getElementById('img-count');
       const btnFinish  = document.getElementById('btn-finish');
 
+      const MAX_IMAGES   = 30;
+      const MAX_IMG_BYTES = 8 * 1024 * 1024; // 8 MB por imagem
       const images  = [];
       let imgIndex  = 0;
 
@@ -394,7 +400,13 @@
       peer.on('open', () => {
         const conn = peer.connect('mkpdf-' + code, { reliable: true });
         conn.on('open',  () => setStatus('Conectado ao celular — tire as fotos e envie', 's-ready', false));
-        conn.on('data',  (data) => { if (typeof data === 'string' && data.startsWith('data:image')) addImage(data); });
+        conn.on('data',  (data) => {
+          if (typeof data !== 'string') return;
+          if (!data.startsWith('data:image')) return;
+          if (data.length > MAX_IMG_BYTES) { setStatus('Imagem muito grande (max 8 MB).', 's-error', false); return; }
+          if (images.length >= MAX_IMAGES) { setStatus('Limite de ' + MAX_IMAGES + ' imagens atingido.', 's-error', false); return; }
+          addImage(data);
+        });
         conn.on('close', () => setStatus('Celular desconectou. Clique em Finalizar para concluir.', 's-waiting', false));
         conn.on('error', () => setStatus('Erro na conexao. Tente novamente.', 's-error', false));
       });
@@ -405,7 +417,10 @@
         setStatus(msg, 's-error', false);
       });
 
-      window.desktopFinalizar = async function () {
+      document.getElementById('btn-cancel-desktop').addEventListener('click', () => window.close());
+      document.getElementById('btn-finish').addEventListener('click', desktopFinalizar);
+
+      async function desktopFinalizar() {
         if (images.length === 0) return;
         btnFinish.disabled = true;
         btnFinish.innerHTML = '<span class="spinner"></span> Empacotando...';
@@ -443,7 +458,6 @@
         }
       };
 
-      window.desktopCancelar = function () { window.close(); };
     }
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -472,6 +486,7 @@
       const fileCamera  = document.getElementById('file-camera');
       const fileGallery = document.getElementById('file-gallery');
 
+      const MAX_IMG_BYTES = 8 * 1024 * 1024; // 8 MB por imagem
       let conn = null, pendingDataUrl = null, sessionOccupied = false;
       let timerInterval = null, peer = null;
 
@@ -532,6 +547,10 @@
 
       function processFile(file) {
         if (!file) return;
+        if (file.size > MAX_IMG_BYTES) {
+          setStatus('Imagem muito grande. Máximo: 8 MB.', 's-error', false);
+          return;
+        }
         const reader = new FileReader();
         reader.onload = (e) => {
           pendingDataUrl = e.target.result;
