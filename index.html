@@ -24,7 +24,7 @@
       border-radius: 28px;
       padding: 32px 24px;
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       box-shadow: 0 4px 32px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
@@ -38,12 +38,11 @@
       border-radius: 16px;
       display: flex; align-items: center; justify-content: center;
     }
-    .logo svg { width: 26px; height: 26px; fill: none; stroke: white; stroke-width: 2; }
 
     h1 { font-size: 20px; font-weight: 800; text-align: center; }
     p.sub { font-size: 13px; color: #6B7280; text-align: center; line-height: 1.5; }
 
-    /* CÓDIGO */
+    /* Código de sessão */
     .code-box {
       width: 100%;
       background: #F5F3FF;
@@ -57,96 +56,150 @@
     .code-digits { font-size: 42px; font-weight: 900; letter-spacing: 0.12em; color: #4C1D95; font-variant-numeric: tabular-nums; }
     .code-hint { font-size: 12px; color: #8B5CF6; margin-top: 4px; }
 
-    /* TIMER */
-    .timer-bar-wrap {
-      width: 100%;
-      display: none;
-    }
-    .timer-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      font-weight: 700;
-      color: #6B7280;
-      margin-bottom: 6px;
-    }
+    /* Timer */
+    .timer-bar-wrap { width: 100%; display: none; }
+    .timer-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #6B7280; margin-bottom: 6px; }
     .timer-label span { color: #7C3AED; }
-    .timer-track {
-      width: 100%;
-      height: 6px;
-      background: #E5E7EB;
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .timer-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #7C3AED, #4F46E5);
-      border-radius: 99px;
-      transition: width 1s linear, background 1s;
-      width: 100%;
-    }
+    .timer-track { width: 100%; height: 6px; background: #E5E7EB; border-radius: 99px; overflow: hidden; }
+    .timer-fill { height: 100%; background: linear-gradient(90deg, #7C3AED, #4F46E5); border-radius: 99px; transition: width 1s linear; width: 100%; }
     .timer-fill.urgent { background: linear-gradient(90deg, #EF4444, #F97316); }
 
-    /* STATUS */
+    /* Status */
     #status-box {
-      width: 100%;
-      padding: 11px 16px;
+      width: 100%; padding: 11px 16px;
       border-radius: 14px;
-      font-size: 13px;
-      font-weight: 600;
-      text-align: center;
-      transition: all 0.3s;
+      font-size: 13px; font-weight: 600;
+      text-align: center; transition: all 0.3s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .status-loading  { background: #F3F4F6; color: #6B7280; }
-    .status-waiting  { background: #FEF3C7; color: #92400E; }
-    .status-ready    { background: #D1FAE5; color: #065F46; }
-    .status-occupied { background: #FEE2E2; color: #991B1B; }
-    .status-sending  { background: #EDE9FE; color: #5B21B6; }
-    .status-sent     { background: #D1FAE5; color: #065F46; }
-    .status-error    { background: #FEE2E2; color: #991B1B; }
-    .status-expired  { background: #FEF3C7; color: #92400E; }
+    .s-loading  { background: #F3F4F6; color: #6B7280; }
+    .s-waiting  { background: #FEF3C7; color: #92400E; }
+    .s-ready    { background: #D1FAE5; color: #065F46; }
+    .s-sending  { background: #EDE9FE; color: #5B21B6; }
+    .s-sent     { background: #D1FAE5; color: #065F46; }
+    .s-error    { background: #FEE2E2; color: #991B1B; }
+    .s-expired  { background: #FEF3C7; color: #92400E; }
 
-    /* PREVIEW */
+    /* Preview mobile */
     #preview-wrap { width: 100%; display: none; flex-direction: column; align-items: center; gap: 12px; }
     #preview { width: 100%; max-height: 260px; object-fit: contain; border-radius: 16px; border: 2px solid #E5E7EB; background: #F9FAFB; }
 
     .btn {
       width: 100%; padding: 15px; border-radius: 18px; border: none;
       font-size: 15px; font-weight: 800; cursor: pointer;
-      transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
     .btn-primary   { background: #7C3AED; color: white; }
+    .btn-primary:hover:not(:disabled) { background: #6D28D9; }
     .btn-secondary { background: #F3F4F6; color: #374151; }
     .btn-send      { background: #059669; color: white; }
 
     input[type="file"] { display: none; }
 
-    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block; }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      flex-shrink: 0;
+    }
+    .spinner-dark {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(107,114,128,0.3);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      flex-shrink: 0;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .privacy-note { font-size: 11px; color: #9CA3AF; text-align: center; line-height: 1.5; }
+    .privacy-note { font-size: 11px; color: #9CA3AF; text-align: center; line-height: 1.5; display: flex; align-items: center; gap: 6px; justify-content: center; }
     #btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+    /* ── MODO DESKTOP ── */
+    #desktop-wrap { width: 100%; display: none; flex-direction: column; gap: 16px; }
+
+    .desktop-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .count-badge {
+      font-size: 12px; font-weight: 700; color: #7C3AED;
+      background: #F5F3FF; border: 1px solid #DDD6FE;
+      border-radius: 999px; padding: 4px 12px;
+    }
+
+    #desktop-gallery {
+      display: flex; flex-direction: column; gap: 10px;
+      max-height: 380px; overflow-y: auto;
+    }
+
+    .thumb-card {
+      display: flex; align-items: center; gap: 12px;
+      background: #F9FAFB; border: 1px solid #E5E7EB;
+      border-radius: 16px; padding: 10px;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    .thumb-card img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; flex-shrink: 0; background: #E5E7EB; }
+    .thumb-info { flex: 1; }
+    .thumb-name { font-size: 12px; font-weight: 700; color: #374151; }
+    .thumb-meta { font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+    .thumb-remove {
+      background: none; border: none; cursor: pointer;
+      color: #D1D5DB; padding: 6px; border-radius: 8px; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .thumb-remove:hover { background: #FEE2E2; color: #EF4444; }
+
+    .empty-gallery {
+      text-align: center; padding: 28px;
+      color: #9CA3AF; font-size: 13px; line-height: 1.6;
+    }
+    .empty-gallery .icon-wrap {
+      width: 48px; height: 48px; background: #F3F4F6; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;
+    }
+
+    #desktop-actions { display: flex; gap: 10px; width: 100%; }
+    #desktop-actions .btn { flex: 1; }
+    .btn-cancel-sm { background: #F3F4F6; color: #374151; flex: 0 0 auto !important; width: 110px !important; }
+    .btn-cancel-sm:hover { background: #FEE2E2; color: #EF4444; }
+    .btn-finish { background: #7C3AED; color: white; }
+    .btn-finish:hover:not(:disabled) { background: #6D28D9; }
+
+    /* SVG inline helper */
+    svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
   </style>
 </head>
 <body>
   <div class="card">
+
+    <!-- Logo -->
     <div class="logo">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
     </div>
 
+    <!-- Título (alterado por JS conforme o modo) -->
     <div>
-      <h1>MarkPDF Captura</h1>
-      <p class="sub" style="margin-top:4px">Digite o código abaixo no computador e tire a foto do documento.</p>
+      <h1 id="page-title">MarkPDF Captura</h1>
+      <p class="sub" id="page-sub" style="margin-top:4px">Carregando...</p>
     </div>
 
+    <!-- [MOBILE] código de sessão -->
     <div class="code-box" id="code-box">
       <div class="code-label">Código de sessão</div>
       <div class="code-digits" id="code-display">--------</div>
-      <div class="code-hint">Digite este código no MarkPDF</div>
+      <div class="code-hint">Digite este código no MarkPDF Pro</div>
     </div>
 
+    <!-- [MOBILE] timer -->
     <div class="timer-bar-wrap" id="timer-wrap">
       <div class="timer-label">
         <span>Sessão expira em</span>
@@ -155,197 +208,396 @@
       <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
     </div>
 
-    <div id="status-box" class="status-loading">Gerando código seguro...</div>
-
-    <div id="preview-wrap">
-      <img id="preview" src="" alt="Pré-visualização" />
-      <button class="btn btn-secondary" id="btn-retake">↩ Tirar outra foto</button>
-      <button class="btn btn-send" id="btn-send">Enviar para o computador</button>
+    <!-- Status (compartilhado mobile/desktop) -->
+    <div id="status-box" class="s-loading">
+      <span class="spinner-dark"></span>
+      <span id="status-text">Iniciando...</span>
     </div>
 
+    <!-- [MOBILE] preview de foto -->
+    <div id="preview-wrap">
+      <img id="preview" src="" alt="Previa da foto" />
+      <button class="btn btn-secondary" id="btn-retake">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+        Tirar outra foto
+      </button>
+      <button class="btn btn-send" id="btn-send">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Enviar para o computador
+      </button>
+    </div>
+
+    <!-- [MOBILE] botões câmera/galeria -->
     <div id="btn-group" style="display:none">
       <button class="btn btn-primary" id="btn-camera">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
           <circle cx="12" cy="13" r="4"/>
         </svg>
         Usar Câmera
       </button>
-      <button class="btn btn-secondary" id="btn-gallery">📁 Escolher da Galeria</button>
+      <button class="btn btn-secondary" id="btn-gallery">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        Escolher da Galeria
+      </button>
     </div>
 
     <input type="file" id="file-camera"  accept="image/*" capture="environment" />
     <input type="file" id="file-gallery" accept="image/*" />
 
-    <p class="privacy-note">🔒 Conexão direta P2P — nenhuma imagem armazenada em servidores</p>
+    <!-- [DESKTOP] galeria de imagens recebidas -->
+    <div id="desktop-wrap">
+      <div class="desktop-toolbar">
+        <span id="session-tag" style="font-size:11px;font-weight:700;color:#8B5CF6;background:#EDE9FE;border-radius:8px;padding:3px 8px;">sessão ---</span>
+        <span class="count-badge" id="img-count">0 imagens</span>
+      </div>
+      <div id="desktop-gallery">
+        <div class="empty-gallery" id="empty-gallery">
+          <div class="icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          Aguardando fotos do celular...<br/>
+          <small>Elas aparecem aqui conforme são enviadas</small>
+        </div>
+      </div>
+      <div id="desktop-actions">
+        <button class="btn btn-cancel-sm" onclick="desktopCancelar()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Cancelar
+        </button>
+        <button class="btn btn-finish" id="btn-finish" disabled onclick="desktopFinalizar()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Finalizar e Enviar ao MarkPDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Rodapé privacidade -->
+    <p class="privacy-note" id="privacy-note">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Conexão direta P2P — nenhuma imagem armazenada em servidores
+    </p>
+
   </div>
 
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script>
-    const TIMEOUT_MS = 3 * 60 * 1000; // 3 minutos
+    const params      = new URLSearchParams(location.search);
+    const isDesktop   = params.get('desktop') === 'true';
+    const sessionCode = params.get('session') || '';
 
-    const statusBox   = document.getElementById('status-box');
-    const codeBox     = document.getElementById('code-box');
-    const codeDisplay = document.getElementById('code-display');
-    const timerWrap   = document.getElementById('timer-wrap');
-    const timerText   = document.getElementById('timer-text');
-    const timerFill   = document.getElementById('timer-fill');
-    const btnGroup    = document.getElementById('btn-group');
-    const previewWrap = document.getElementById('preview-wrap');
-    const previewImg  = document.getElementById('preview');
-    const btnCamera   = document.getElementById('btn-camera');
-    const btnGallery  = document.getElementById('btn-gallery');
-    const btnRetake   = document.getElementById('btn-retake');
-    const btnSend     = document.getElementById('btn-send');
-    const fileCamera  = document.getElementById('file-camera');
-    const fileGallery = document.getElementById('file-gallery');
+    // ──────────────────────────────────────────────────────────────────────────
+    // Utilitário status
+    // ──────────────────────────────────────────────────────────────────────────
+    const statusBox  = document.getElementById('status-box');
+    const statusText = document.getElementById('status-text');
 
-    let conn = null;
-    let pendingDataUrl = null;
-    let sessionOccupied = false;
-    let timerInterval = null;
-    let peer = null;
-
-    function setStatus(msg, cls) {
-      statusBox.textContent = msg;
+    function setStatus(msg, cls, loading) {
       statusBox.className = cls;
-    }
-
-    function gerarCodigo() {
-      return String(Math.floor(10000000 + Math.random() * 90000000));
-    }
-
-    function iniciarTimer() {
-      const inicio = Date.now();
-      timerWrap.style.display = 'block';
-
-      timerInterval = setInterval(() => {
-        const elapsed = Date.now() - inicio;
-        const restante = Math.max(0, TIMEOUT_MS - elapsed);
-        const pct = (restante / TIMEOUT_MS) * 100;
-
-        const min = Math.floor(restante / 60000);
-        const sec = Math.floor((restante % 60000) / 1000);
-        timerText.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
-        timerFill.style.width = pct + '%';
-
-        if (pct < 30) timerFill.classList.add('urgent');
-        else timerFill.classList.remove('urgent');
-
-        if (restante === 0) {
-          clearInterval(timerInterval);
-          if (!sessionOccupied) {
-            setStatus('Sessão expirada. Recarregando...', 'status-expired');
-            setTimeout(() => location.reload(), 1500);
-          }
-        }
-      }, 1000);
-    }
-
-    function iniciarSessao() {
-      const codigo = gerarCodigo();
-      const peerId = 'mkpdf-' + codigo;
-
-      peer = new Peer(peerId);
-
-      peer.on('open', () => {
-        codeDisplay.textContent = codigo;
-        codeBox.style.display = 'block';
-        setStatus('Aguardando o computador conectar...', 'status-waiting');
-        iniciarTimer();
-      });
-
-      peer.on('connection', (c) => {
-        // Bloqueia segunda conexão
-        if (sessionOccupied) {
-          c.close();
-          return;
-        }
-
-        sessionOccupied = true;
-        conn = c;
-
-        conn.on('open', () => {
-          clearInterval(timerInterval);
-          timerWrap.style.display = 'none';
-          setStatus('✅ Conectado ao computador!', 'status-ready');
-          btnGroup.style.display = 'flex';
-        });
-
-        conn.on('close', () => {
-          setStatus('Conexão encerrada. Recarregue para nova sessão.', 'status-error');
-          btnGroup.style.display = 'none';
-        });
-
-        conn.on('error', () => setStatus('Erro na conexão.', 'status-error'));
-      });
-
-      peer.on('error', (err) => {
-        if (err.type === 'unavailable-id') {
-          // Código em uso — gerar novo automaticamente
-          peer.destroy();
-          iniciarSessao();
-        } else {
-          setStatus('Erro ao criar sessão. Recarregue a página.', 'status-error');
-        }
-      });
-    }
-
-    function processFile(file) {
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        pendingDataUrl = e.target.result;
-        previewImg.src = pendingDataUrl;
-        previewWrap.style.display = 'flex';
-        btnGroup.style.display = 'none';
-      };
-      reader.readAsDataURL(file);
-    }
-
-    btnCamera.addEventListener('click',  () => fileCamera.click());
-    btnGallery.addEventListener('click', () => fileGallery.click());
-    fileCamera.addEventListener('change',  (e) => processFile(e.target.files[0]));
-    fileGallery.addEventListener('change', (e) => processFile(e.target.files[0]));
-
-    btnRetake.addEventListener('click', () => {
-      pendingDataUrl = null;
-      previewWrap.style.display = 'none';
-      btnGroup.style.display = 'flex';
-      fileCamera.value = '';
-      fileGallery.value = '';
-    });
-
-    btnSend.addEventListener('click', () => {
-      if (!conn || !pendingDataUrl) return;
-      btnSend.disabled = true;
-      btnSend.innerHTML = '<span class="spinner"></span> Enviando...';
-      setStatus('Enviando imagem...', 'status-sending');
-
-      try {
-        conn.send(pendingDataUrl);
-        setTimeout(() => {
-          setStatus('✅ Imagem enviada com sucesso!', 'status-sent');
-          btnSend.innerHTML = '✅ Enviado!';
-          setTimeout(() => {
-            pendingDataUrl = null;
-            previewWrap.style.display = 'none';
-            btnGroup.style.display = 'flex';
-            btnSend.disabled = false;
-            btnSend.innerHTML = 'Enviar para o computador';
-            setStatus('✅ Conectado — pronto para nova foto', 'status-ready');
-            fileCamera.value = '';
-            fileGallery.value = '';
-          }, 2000);
-        }, 400);
-      } catch (err) {
-        setStatus('Erro ao enviar. Tente novamente.', 'status-error');
-        btnSend.disabled = false;
-        btnSend.innerHTML = 'Enviar para o computador';
+      statusText.textContent = msg;
+      const sp = statusBox.querySelector('.spinner-dark');
+      if (loading && !sp) {
+        const s = document.createElement('span');
+        s.className = 'spinner-dark';
+        statusBox.insertBefore(s, statusText);
+      } else if (!loading && sp) {
+        sp.remove();
       }
-    });
+    }
 
-    iniciarSessao();
+    // ──────────────────────────────────────────────────────────────────────────
+    // Roteamento de modo
+    // ──────────────────────────────────────────────────────────────────────────
+    if (isDesktop && sessionCode.length === 8) {
+      iniciarModoDesktop(sessionCode);
+    } else {
+      iniciarModoMobile();
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // MODO DESKTOP
+    // Conecta como CLIENT PeerJS ao celular (host), recebe fotos,
+    // empacota em ZIP e baixa — o Electron detecta via fs.watch()
+    // ══════════════════════════════════════════════════════════════════════════
+    function iniciarModoDesktop(code) {
+      document.getElementById('page-title').textContent = 'Receptor MarkPDF';
+      document.getElementById('page-sub').textContent   = 'Aguardando fotos do celular. Clique em Finalizar quando terminar.';
+      document.getElementById('code-box').style.display   = 'none';
+      document.getElementById('timer-wrap').style.display = 'none';
+      document.getElementById('btn-group').style.display  = 'none';
+      document.getElementById('preview-wrap').style.display = 'none';
+      document.getElementById('privacy-note').style.display = 'none';
+      document.getElementById('desktop-wrap').style.display = 'flex';
+      document.getElementById('session-tag').textContent    = 'sessão ' + code;
+
+      const gallery    = document.getElementById('desktop-gallery');
+      const emptyEl    = document.getElementById('empty-gallery');
+      const imgCountEl = document.getElementById('img-count');
+      const btnFinish  = document.getElementById('btn-finish');
+
+      const images  = [];
+      let imgIndex  = 0;
+
+      function updateCount() {
+        const n = images.length;
+        imgCountEl.textContent = n + (n === 1 ? ' imagem' : ' imagens');
+        btnFinish.disabled     = (n === 0);
+      }
+
+      function addImage(dataUrl) {
+        imgIndex++;
+        const ext  = dataUrl.startsWith('data:image/png') ? 'png' : 'jpg';
+        const name = `foto_${String(imgIndex).padStart(3,'0')}.${ext}`;
+        images.push({ dataUrl, name });
+
+        if (emptyEl.parentNode) emptyEl.remove();
+
+        const sizeKB = Math.round(dataUrl.length * 0.75 / 1024);
+        const card   = document.createElement('div');
+        card.className = 'thumb-card';
+        card.innerHTML = `
+          <img src="${dataUrl}" alt="${name}" />
+          <div class="thumb-info">
+            <div class="thumb-name">${name}</div>
+            <div class="thumb-meta">${sizeKB} KB</div>
+          </div>
+          <button class="thumb-remove" title="Remover">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        `;
+        card.querySelector('.thumb-remove').addEventListener('click', () => {
+          const pos = images.findIndex(i => i.name === name);
+          if (pos !== -1) images.splice(pos, 1);
+          card.remove();
+          if (images.length === 0) gallery.insertBefore(emptyEl, gallery.firstChild);
+          updateCount();
+        });
+
+        gallery.appendChild(card);
+        gallery.scrollTop = gallery.scrollHeight;
+        updateCount();
+        setStatus(`${images.length} imagem(ns) recebida(s) — aguardando mais`, 's-ready', false);
+      }
+
+      setStatus('Conectando ao celular...', 's-loading', true);
+
+      const peer = new Peer();
+      peer.on('open', () => {
+        const conn = peer.connect('mkpdf-' + code, { reliable: true });
+        conn.on('open',  () => setStatus('Conectado ao celular — tire as fotos e envie', 's-ready', false));
+        conn.on('data',  (data) => { if (typeof data === 'string' && data.startsWith('data:image')) addImage(data); });
+        conn.on('close', () => setStatus('Celular desconectou. Clique em Finalizar para concluir.', 's-waiting', false));
+        conn.on('error', () => setStatus('Erro na conexao. Tente novamente.', 's-error', false));
+      });
+      peer.on('error', (err) => {
+        const msg = err.type === 'peer-unavailable'
+          ? 'Sessao nao encontrada. Verifique o codigo no celular.'
+          : 'Erro de conexao: ' + err.type;
+        setStatus(msg, 's-error', false);
+      });
+
+      window.desktopFinalizar = async function () {
+        if (images.length === 0) return;
+        btnFinish.disabled = true;
+        btnFinish.innerHTML = '<span class="spinner"></span> Empacotando...';
+        setStatus('Criando arquivo para o MarkPDF...', 's-sending', false);
+        try {
+          const zip = new JSZip();
+          for (const img of images) {
+            zip.file(img.name, img.dataUrl.split(',')[1], { base64: true });
+          }
+          const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href     = url;
+          a.download = `markpdf-captura-${code}.zip`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          setStatus('Arquivo enviado ao MarkPDF. Pode fechar esta janela.', 's-sent', false);
+          btnFinish.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Enviado com sucesso
+          `;
+          btnFinish.disabled = false;
+          btnFinish.style.background = '#059669';
+        } catch (e) {
+          setStatus('Erro ao criar arquivo. Tente novamente.', 's-error', false);
+          btnFinish.disabled = false;
+          btnFinish.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Finalizar e Enviar ao MarkPDF
+          `;
+        }
+      };
+
+      window.desktopCancelar = function () { window.close(); };
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // MODO MOBILE (padrão — sem parâmetros na URL)
+    // Gera código, torna-se PeerJS HOST, aguarda o receptor desktop conectar
+    // ══════════════════════════════════════════════════════════════════════════
+    function iniciarModoMobile() {
+      document.getElementById('page-sub').textContent   = 'Digite o código abaixo no computador e tire a foto do documento.';
+      document.getElementById('desktop-wrap').style.display = 'none';
+      setStatus('Gerando sessão segura...', 's-loading', true);
+
+      const TIMEOUT_MS = 3 * 60 * 1000;
+
+      const codeBox     = document.getElementById('code-box');
+      const codeDisplay = document.getElementById('code-display');
+      const timerWrap   = document.getElementById('timer-wrap');
+      const timerText   = document.getElementById('timer-text');
+      const timerFill   = document.getElementById('timer-fill');
+      const btnGroup    = document.getElementById('btn-group');
+      const previewWrap = document.getElementById('preview-wrap');
+      const previewImg  = document.getElementById('preview');
+      const btnCamera   = document.getElementById('btn-camera');
+      const btnGallery  = document.getElementById('btn-gallery');
+      const btnRetake   = document.getElementById('btn-retake');
+      const btnSend     = document.getElementById('btn-send');
+      const fileCamera  = document.getElementById('file-camera');
+      const fileGallery = document.getElementById('file-gallery');
+
+      let conn = null, pendingDataUrl = null, sessionOccupied = false;
+      let timerInterval = null, peer = null;
+
+      function gerarCodigo() { return String(Math.floor(10000000 + Math.random() * 90000000)); }
+
+      function iniciarTimer() {
+        const inicio = Date.now();
+        timerWrap.style.display = 'block';
+        timerInterval = setInterval(() => {
+          const restante = Math.max(0, TIMEOUT_MS - (Date.now() - inicio));
+          const pct = (restante / TIMEOUT_MS) * 100;
+          const min = Math.floor(restante / 60000);
+          const sec = Math.floor((restante % 60000) / 1000);
+          timerText.textContent = `${min}:${sec.toString().padStart(2,'0')}`;
+          timerFill.style.width = pct + '%';
+          if (pct < 30) timerFill.classList.add('urgent');
+          else timerFill.classList.remove('urgent');
+          if (restante === 0) {
+            clearInterval(timerInterval);
+            if (!sessionOccupied) {
+              setStatus('Sessão expirada. Recarregando...', 's-expired', false);
+              setTimeout(() => location.reload(), 1500);
+            }
+          }
+        }, 1000);
+      }
+
+      function iniciarSessao() {
+        const codigo = gerarCodigo();
+        peer = new Peer('mkpdf-' + codigo);
+        peer.on('open', () => {
+          codeDisplay.textContent = codigo;
+          codeBox.style.display   = 'block';
+          setStatus('Aguardando o receptor conectar...', 's-waiting', false);
+          iniciarTimer();
+        });
+        peer.on('connection', (c) => {
+          if (sessionOccupied) { c.close(); return; }
+          sessionOccupied = true;
+          conn = c;
+          conn.on('open', () => {
+            clearInterval(timerInterval);
+            timerWrap.style.display = 'none';
+            setStatus('Conectado — tire a foto e envie', 's-ready', false);
+            btnGroup.style.display = 'flex';
+          });
+          conn.on('close', () => {
+            setStatus('Conexão encerrada.', 's-error', false);
+            btnGroup.style.display = 'none';
+          });
+          conn.on('error', () => setStatus('Erro na conexão.', 's-error', false));
+        });
+        peer.on('error', (err) => {
+          if (err.type === 'unavailable-id') { peer.destroy(); iniciarSessao(); }
+          else setStatus('Erro ao criar sessão.', 's-error', false);
+        });
+      }
+
+      function processFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          pendingDataUrl = e.target.result;
+          previewImg.src = pendingDataUrl;
+          previewWrap.style.display = 'flex';
+          btnGroup.style.display    = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+
+      btnCamera.addEventListener('click',  () => fileCamera.click());
+      btnGallery.addEventListener('click', () => fileGallery.click());
+      fileCamera.addEventListener('change',  (e) => processFile(e.target.files[0]));
+      fileGallery.addEventListener('change', (e) => processFile(e.target.files[0]));
+
+      btnRetake.addEventListener('click', () => {
+        pendingDataUrl = null;
+        previewWrap.style.display = 'none';
+        btnGroup.style.display    = 'flex';
+        fileCamera.value = ''; fileGallery.value = '';
+      });
+
+      btnSend.addEventListener('click', () => {
+        if (!conn || !pendingDataUrl) return;
+        btnSend.disabled = true;
+        btnSend.innerHTML = '<span class="spinner"></span> Enviando...';
+        setStatus('Enviando imagem...', 's-sending', false);
+        try {
+          conn.send(pendingDataUrl);
+          setTimeout(() => {
+            setStatus('Imagem enviada com sucesso!', 's-sent', false);
+            btnSend.innerHTML = `
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Enviado!
+            `;
+            setTimeout(() => {
+              pendingDataUrl = null;
+              previewWrap.style.display = 'none';
+              btnGroup.style.display    = 'flex';
+              btnSend.disabled  = false;
+              btnSend.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle">
+                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+                Enviar para o computador
+              `;
+              setStatus('Pronto para nova foto', 's-ready', false);
+              fileCamera.value = ''; fileGallery.value = '';
+            }, 1800);
+          }, 400);
+        } catch {
+          setStatus('Erro ao enviar. Tente novamente.', 's-error', false);
+          btnSend.disabled  = false;
+          btnSend.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+            Enviar para o computador
+          `;
+        }
+      });
+
+      iniciarSessao();
+    }
   </script>
 </body>
 </html>
