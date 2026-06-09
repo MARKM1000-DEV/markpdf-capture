@@ -41,11 +41,40 @@
       align-items: center;
       justify-content: center;
     }
-
     .logo svg { width: 28px; height: 28px; fill: none; stroke: white; stroke-width: 2; }
 
-    h1 { font-size: 20px; font-weight: 800; text-align: center; color: #1D1D1F; }
+    h1 { font-size: 20px; font-weight: 800; text-align: center; }
     p.sub { font-size: 13px; color: #6B7280; text-align: center; line-height: 1.5; }
+
+    /* CÓDIGO DE 6 DÍGITOS */
+    .code-box {
+      width: 100%;
+      background: #F5F3FF;
+      border: 2px solid #DDD6FE;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+    .code-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #7C3AED;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .code-digits {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: #4C1D95;
+      font-variant-numeric: tabular-nums;
+    }
+    .code-hint {
+      font-size: 12px;
+      color: #8B5CF6;
+      margin-top: 6px;
+    }
 
     #status-box {
       width: 100%;
@@ -56,7 +85,8 @@
       text-align: center;
       transition: all 0.3s;
     }
-    .status-connecting { background: #FEF3C7; color: #92400E; }
+    .status-loading    { background: #F3F4F6; color: #6B7280; }
+    .status-waiting    { background: #FEF3C7; color: #92400E; }
     .status-ready      { background: #D1FAE5; color: #065F46; }
     .status-sending    { background: #EDE9FE; color: #5B21B6; }
     .status-sent       { background: #D1FAE5; color: #065F46; }
@@ -69,10 +99,9 @@
       align-items: center;
       gap: 12px;
     }
-
     #preview {
       width: 100%;
-      max-height: 300px;
+      max-height: 280px;
       object-fit: contain;
       border-radius: 16px;
       border: 2px solid #E5E7EB;
@@ -94,27 +123,11 @@
       gap: 8px;
     }
     .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .btn-primary   { background: #7C3AED; color: white; }
-    .btn-primary:hover:not(:disabled) { background: #6D28D9; }
-
     .btn-secondary { background: #F3F4F6; color: #374151; }
-    .btn-secondary:hover:not(:disabled) { background: #E5E7EB; }
-
     .btn-send      { background: #059669; color: white; }
-    .btn-send:hover:not(:disabled) { background: #047857; }
-
-    .privacy-note {
-      font-size: 11px;
-      color: #9CA3AF;
-      text-align: center;
-      line-height: 1.5;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      justify-content: center;
-    }
 
     input[type="file"] { display: none; }
 
@@ -127,6 +140,15 @@
       display: inline-block;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    .privacy-note {
+      font-size: 11px;
+      color: #9CA3AF;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    #btn-group { width: 100%; display: flex; flex-direction: column; gap: 12px; }
   </style>
 </head>
 <body>
@@ -137,10 +159,17 @@
 
     <div>
       <h1>MarkPDF Captura</h1>
-      <p class="sub" style="margin-top:6px">Tire uma foto do documento e ela aparece instantaneamente no computador.</p>
+      <p class="sub" style="margin-top:6px">Digite o código abaixo no computador e tire a foto do documento.</p>
     </div>
 
-    <div id="status-box" class="status-connecting">Conectando ao computador...</div>
+    <!-- CÓDIGO GERADO -->
+    <div class="code-box" id="code-box" style="display:none">
+      <div class="code-label">Código de sessão</div>
+      <div class="code-digits" id="code-display">------</div>
+      <div class="code-hint">Digite este código no MarkPDF</div>
+    </div>
+
+    <div id="status-box" class="status-loading">Gerando código...</div>
 
     <div id="preview-wrap">
       <img id="preview" src="" alt="Pré-visualização" />
@@ -148,33 +177,30 @@
       <button class="btn btn-send" id="btn-send">Enviar para o computador</button>
     </div>
 
-    <div id="btn-group" style="width:100%; display:flex; flex-direction:column; gap:12px;">
-      <button class="btn btn-primary" id="btn-camera" disabled>
+    <div id="btn-group" style="display:none">
+      <button class="btn btn-primary" id="btn-camera">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
           <circle cx="12" cy="13" r="4"/>
         </svg>
         Usar Câmera
       </button>
-      <button class="btn btn-secondary" id="btn-gallery" disabled>
+      <button class="btn btn-secondary" id="btn-gallery">
         📁 Escolher da Galeria
       </button>
     </div>
 
-    <input type="file" id="file-camera"   accept="image/*" capture="environment" />
-    <input type="file" id="file-gallery"  accept="image/*" />
+    <input type="file" id="file-camera"  accept="image/*" capture="environment" />
+    <input type="file" id="file-gallery" accept="image/*" />
 
-    <p class="privacy-note">
-      🔒 Conexão direta P2P — nenhuma imagem é armazenada em servidores
-    </p>
+    <p class="privacy-note">🔒 Conexão direta — nenhuma imagem armazenada em servidores</p>
   </div>
 
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <script>
-    const params   = new URLSearchParams(location.search);
-    const peerId   = params.get('peer');
-
     const statusBox   = document.getElementById('status-box');
+    const codeBox     = document.getElementById('code-box');
+    const codeDisplay = document.getElementById('code-display');
     const btnGroup    = document.getElementById('btn-group');
     const previewWrap = document.getElementById('preview-wrap');
     const previewImg  = document.getElementById('preview');
@@ -193,29 +219,45 @@
       statusBox.className = cls;
     }
 
-    if (!peerId) {
-      setStatus('Código inválido. Escaneie novamente o QR Code.', 'status-error');
-    } else {
-      const peer = new Peer();
-
-      peer.on('open', () => {
-        conn = peer.connect(peerId, { reliable: true });
-
-        conn.on('open', () => {
-          setStatus('✅ Conectado ao computador!', 'status-ready');
-          btnCamera.disabled  = false;
-          btnGallery.disabled = false;
-        });
-
-        conn.on('error', () => setStatus('Erro na conexão. Feche e escaneie novamente.', 'status-error'));
-        conn.on('close', () => setStatus('Conexão encerrada pelo computador.', 'status-error'));
-      });
-
-      peer.on('error', (err) => {
-        console.error(err);
-        setStatus('Não foi possível conectar. Verifique sua internet.', 'status-error');
-      });
+    // Gera código de 6 dígitos aleatório
+    function gerarCodigo() {
+      return String(Math.floor(100000 + Math.random() * 900000));
     }
+
+    const codigo = gerarCodigo();
+    const peerId = 'mkpdf-' + codigo;
+
+    // Cria o Peer com ID fixo baseado no código
+    const peer = new Peer(peerId);
+
+    peer.on('open', () => {
+      codeDisplay.textContent = codigo;
+      codeBox.style.display = 'block';
+      setStatus('Aguardando o computador conectar...', 'status-waiting');
+    });
+
+    // Desktop conecta neste celular
+    peer.on('connection', (c) => {
+      conn = c;
+      conn.on('open', () => {
+        setStatus('✅ Conectado ao computador!', 'status-ready');
+        btnGroup.style.display = 'flex';
+      });
+      conn.on('close', () => {
+        setStatus('Conexão encerrada. Recarregue para nova sessão.', 'status-error');
+        btnGroup.style.display = 'none';
+      });
+      conn.on('error', () => setStatus('Erro na conexão.', 'status-error'));
+    });
+
+    peer.on('error', (err) => {
+      if (err.type === 'unavailable-id') {
+        // ID em uso — gerar novo
+        location.reload();
+      } else {
+        setStatus('Erro ao criar sessão. Recarregue a página.', 'status-error');
+      }
+    });
 
     function processFile(file) {
       if (!file) return;
@@ -253,7 +295,6 @@
         setTimeout(() => {
           setStatus('✅ Imagem enviada com sucesso!', 'status-sent');
           btnSend.innerHTML = '✅ Enviado!';
-          btnSend.style.background = '#059669';
           setTimeout(() => {
             pendingDataUrl = null;
             previewWrap.style.display = 'none';
@@ -264,7 +305,7 @@
             fileCamera.value = '';
             fileGallery.value = '';
           }, 2000);
-        }, 500);
+        }, 400);
       } catch (err) {
         setStatus('Erro ao enviar. Tente novamente.', 'status-error');
         btnSend.disabled = false;
