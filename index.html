@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MarkPDF — Captura de Documento</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #F5F5F7;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: #1D1D1F;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #7C3AED, #4F46E5);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo svg { width: 28px; height: 28px; fill: none; stroke: white; stroke-width: 2; }
+
+    h1 { font-size: 20px; font-weight: 800; text-align: center; color: #1D1D1F; }
+    p.sub { font-size: 13px; color: #6B7280; text-align: center; line-height: 1.5; }
+
+    #status-box {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .status-connecting { background: #FEF3C7; color: #92400E; }
+    .status-ready      { background: #D1FAE5; color: #065F46; }
+    .status-sending    { background: #EDE9FE; color: #5B21B6; }
+    .status-sent       { background: #D1FAE5; color: #065F46; }
+    .status-error      { background: #FEE2E2; color: #991B1B; }
+
+    #preview-wrap {
+      width: 100%;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #preview {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      border-radius: 16px;
+      border: 2px solid #E5E7EB;
+      background: #F9FAFB;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 20px;
+      border: none;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-primary   { background: #7C3AED; color: white; }
+    .btn-primary:hover:not(:disabled) { background: #6D28D9; }
+
+    .btn-secondary { background: #F3F4F6; color: #374151; }
+    .btn-secondary:hover:not(:disabled) { background: #E5E7EB; }
+
+    .btn-send      { background: #059669; color: white; }
+    .btn-send:hover:not(:disabled) { background: #047857; }
+
+    .privacy-note {
+      font-size: 11px;
+      color: #9CA3AF;
+      text-align: center;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    input[type="file"] { display: none; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    </div>
+
+    <div>
+      <h1>MarkPDF Captura</h1>
+      <p class="sub" style="margin-top:6px">Tire uma foto do documento e ela aparece instantaneamente no computador.</p>
+    </div>
+
+    <div id="status-box" class="status-connecting">Conectando ao computador...</div>
+
+    <div id="preview-wrap">
+      <img id="preview" src="" alt="Pré-visualização" />
+      <button class="btn btn-secondary" id="btn-retake">↩ Tirar outra foto</button>
+      <button class="btn btn-send" id="btn-send">Enviar para o computador</button>
+    </div>
+
+    <div id="btn-group" style="width:100%; display:flex; flex-direction:column; gap:12px;">
+      <button class="btn btn-primary" id="btn-camera" disabled>
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        Usar Câmera
+      </button>
+      <button class="btn btn-secondary" id="btn-gallery" disabled>
+        📁 Escolher da Galeria
+      </button>
+    </div>
+
+    <input type="file" id="file-camera"   accept="image/*" capture="environment" />
+    <input type="file" id="file-gallery"  accept="image/*" />
+
+    <p class="privacy-note">
+      🔒 Conexão direta P2P — nenhuma imagem é armazenada em servidores
+    </p>
+  </div>
+
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script>
+    const params   = new URLSearchParams(location.search);
+    const peerId   = params.get('peer');
+
+    const statusBox   = document.getElementById('status-box');
+    const btnGroup    = document.getElementById('btn-group');
+    const previewWrap = document.getElementById('preview-wrap');
+    const previewImg  = document.getElementById('preview');
+    const btnCamera   = document.getElementById('btn-camera');
+    const btnGallery  = document.getElementById('btn-gallery');
+    const btnRetake   = document.getElementById('btn-retake');
+    const btnSend     = document.getElementById('btn-send');
+    const fileCamera  = document.getElementById('file-camera');
+    const fileGallery = document.getElementById('file-gallery');
+
+    let conn = null;
+    let pendingDataUrl = null;
+
+    function setStatus(msg, cls) {
+      statusBox.textContent = msg;
+      statusBox.className = cls;
+    }
+
+    if (!peerId) {
+      setStatus('Código inválido. Escaneie novamente o QR Code.', 'status-error');
+    } else {
+      const peer = new Peer();
+
+      peer.on('open', () => {
+        conn = peer.connect(peerId, { reliable: true, serialization: 'raw' });
+
+        conn.on('open', () => {
+          setStatus('✅ Conectado ao computador!', 'status-ready');
+          btnCamera.disabled  = false;
+          btnGallery.disabled = false;
+        });
+
+        conn.on('error', () => setStatus('Erro na conexão. Feche e escaneie novamente.', 'status-error'));
+        conn.on('close', () => setStatus('Conexão encerrada pelo computador.', 'status-error'));
+      });
+
+      peer.on('error', (err) => {
+        console.error(err);
+        setStatus('Não foi possível conectar. Verifique sua internet.', 'status-error');
+      });
+    }
+
+    function processFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        pendingDataUrl = e.target.result;
+        previewImg.src = pendingDataUrl;
+        previewWrap.style.display = 'flex';
+        btnGroup.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    btnCamera.addEventListener('click',  () => fileCamera.click());
+    btnGallery.addEventListener('click', () => fileGallery.click());
+    fileCamera.addEventListener('change',  (e) => processFile(e.target.files[0]));
+    fileGallery.addEventListener('change', (e) => processFile(e.target.files[0]));
+
+    btnRetake.addEventListener('click', () => {
+      pendingDataUrl = null;
+      previewWrap.style.display = 'none';
+      btnGroup.style.display = 'flex';
+      fileCamera.value = '';
+      fileGallery.value = '';
+    });
+
+    btnSend.addEventListener('click', () => {
+      if (!conn || !pendingDataUrl) return;
+      btnSend.disabled = true;
+      btnSend.innerHTML = '<span class="spinner"></span> Enviando...';
+      setStatus('Enviando imagem...', 'status-sending');
+
+      try {
+        conn.send(pendingDataUrl);
+        setTimeout(() => {
+          setStatus('✅ Imagem enviada com sucesso!', 'status-sent');
+          btnSend.innerHTML = '✅ Enviado!';
+          btnSend.style.background = '#059669';
+          setTimeout(() => {
+            pendingDataUrl = null;
+            previewWrap.style.display = 'none';
+            btnGroup.style.display = 'flex';
+            btnSend.disabled = false;
+            btnSend.innerHTML = 'Enviar para o computador';
+            setStatus('✅ Conectado — pronto para nova foto', 'status-ready');
+            fileCamera.value = '';
+            fileGallery.value = '';
+          }, 2000);
+        }, 500);
+      } catch (err) {
+        setStatus('Erro ao enviar. Tente novamente.', 'status-error');
+        btnSend.disabled = false;
+        btnSend.innerHTML = 'Enviar para o computador';
+      }
+    });
+  </script>
+</body>
+</html>
